@@ -12,6 +12,7 @@
       <bpmn:lane id="Lane_1iir6w0" name="Kommunikationsabteilung">
         <bpmn:flowNodeRef>TweetAnfragePruefen</bpmn:flowNodeRef>
         <bpmn:flowNodeRef>ExclusiveGateway_1qa6x80</bpmn:flowNodeRef>
+        <bpmn:flowNodeRef>Task_1ydpg0b</bpmn:flowNodeRef>
       </bpmn:lane>
       <bpmn:lane id="Lane_1d0re29" name="Automatisch">
         <bpmn:flowNodeRef>Pruefergebnis</bpmn:flowNodeRef>
@@ -28,7 +29,7 @@
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">#{checkResult == 'rejected'}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
     <bpmn:sequenceFlow id="SequenceFlow_0glyf4v" sourceRef="ExclusiveGateway_1qa6x80" targetRef="TweetAnfragePruefen" />
-    <bpmn:sequenceFlow id="SequenceFlow_1vqcip2" sourceRef="TweetAnfrageEingereicht" targetRef="ExclusiveGateway_1qa6x80" />
+    <bpmn:sequenceFlow id="SequenceFlow_1vqcip2" sourceRef="TweetAnfrageEingereicht" targetRef="Task_1ydpg0b" />
     <bpmn:sequenceFlow id="SequenceFlow_1rlwf8z" sourceRef="TweetAnfragePruefen" targetRef="Pruefergebnis" />
     <bpmn:sequenceFlow id="Genehmigt" name="genehmigt" sourceRef="Pruefergebnis" targetRef="TweetSenden" />
     <bpmn:sequenceFlow id="ZuUeberarbeiten" name="zu überarbeiten" sourceRef="Pruefergebnis" targetRef="UserTask_1dzf4id">
@@ -87,8 +88,8 @@
       <bpmn:outgoing>SequenceFlow_1rlwf8z</bpmn:outgoing>
     </bpmn:userTask>
     <bpmn:exclusiveGateway id="ExclusiveGateway_1qa6x80">
-      <bpmn:incoming>SequenceFlow_1vqcip2</bpmn:incoming>
       <bpmn:incoming>SequenceFlow_0vo977v</bpmn:incoming>
+      <bpmn:incoming>SequenceFlow_1k0ozwt</bpmn:incoming>
       <bpmn:outgoing>SequenceFlow_0glyf4v</bpmn:outgoing>
     </bpmn:exclusiveGateway>
     <bpmn:userTask id="UserTask_1dzf4id" name="Tweet-Anfrage prüfen" camunda:assignee="${anfrageStellenderBenutzer}">
@@ -106,6 +107,11 @@
       <bpmn:outgoing>SequenceFlow_0vo977v</bpmn:outgoing>
     </bpmn:userTask>
     <bpmn:sequenceFlow id="SequenceFlow_0vo977v" sourceRef="UserTask_1dzf4id" targetRef="ExclusiveGateway_1qa6x80" />
+    <bpmn:scriptTask id="Task_1ydpg0b">
+      <bpmn:incoming>SequenceFlow_1vqcip2</bpmn:incoming>
+      <bpmn:outgoing>SequenceFlow_1k0ozwt</bpmn:outgoing>
+    </bpmn:scriptTask>
+    <bpmn:sequenceFlow id="SequenceFlow_1k0ozwt" sourceRef="Task_1ydpg0b" targetRef="ExclusiveGateway_1qa6x80" />
   </bpmn:process>
   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
     <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="Collaboration_1y44tdo">
@@ -162,8 +168,7 @@
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="SequenceFlow_1vqcip2_di" bpmnElement="SequenceFlow_1vqcip2">
         <di:waypoint x="122" y="94" />
-        <di:waypoint x="122" y="212" />
-        <di:waypoint x="164" y="212" />
+        <di:waypoint x="122" y="113" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="SequenceFlow_1rlwf8z_di" bpmnElement="SequenceFlow_1rlwf8z">
         <di:waypoint x="353" y="212" />
@@ -213,6 +218,14 @@
         <di:waypoint x="554" y="24" />
         <di:waypoint x="189" y="24" />
         <di:waypoint x="189" y="187" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="ScriptTask_0o1ylmn_di" bpmnElement="Task_1ydpg0b">
+        <dc:Bounds x="72" y="113" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="SequenceFlow_1k0ozwt_di" bpmnElement="SequenceFlow_1k0ozwt">
+        <di:waypoint x="122" y="193" />
+        <di:waypoint x="122" y="212" />
+        <di:waypoint x="164" y="212" />
       </bpmndi:BPMNEdge>
     </bpmndi:BPMNPlane>
   </bpmndi:BPMNDiagram>
